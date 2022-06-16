@@ -1,0 +1,12 @@
+# sudo docker-compose up
+
+version: '3'
+
+services:
+  dotnet-script:
+    container_name: AED2_MouseAndCheese
+    image: mcr.microsoft.com/dotnet/sdk:6.0
+    working_dir: /usr/src/app
+    command: [ "dotnet", "run" ]
+    volumes:
+      - ./:/usr/src/app
