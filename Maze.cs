@@ -44,129 +44,122 @@ public class Maze
         }
     }
 
-    private void MoveUp(Position currentPosition)
+    private bool MoveUp(Position currentPosition)
     {
+        bool canMoveUp = true;
+        bool canMoveRight = true;
+        bool canMoveLeft = true;
+        Position nextPosition = new Position(currentPosition.Column, currentPosition.Row - 1);
+
         int indexUpRow = currentPosition.Row - 1;
         char valueUpRow = _maze[indexUpRow, currentPosition.Column];
 
-        bool canMoveUp = true;
-        if (indexUpRow < 0) canMoveUp = false;
-        else if (valueUpRow is Constants.Wall or Constants.Mouse) canMoveUp = false;
-
-        Position nextPosition = new Position(currentPosition.Column, currentPosition.Row - 1);
-        if (_path.Isset(nextPosition)) canMoveUp = false;
+        if (valueUpRow is Constants.Wall or Constants.Mouse) return false;
+        if (_path.Isset(nextPosition)) return false;
         _path.Add(nextPosition);
+        Console.WriteLine($"→ Moved to up \t from [{currentPosition.Column},{currentPosition.Row}] to [{nextPosition.Column},{nextPosition.Row}]");
 
+        CheckCheese(nextPosition);
+        if (_cheeseFound == false) canMoveUp = MoveUp(nextPosition);
+        if (_cheeseFound == false) canMoveRight = MoveRight(nextPosition);
+        if (_cheeseFound == false) canMoveLeft = MoveLeft(nextPosition);
 
-        if (canMoveUp)
+        if (canMoveUp == false && canMoveRight == false && canMoveLeft == false)
         {
-            Console.WriteLine($"→ Moved to up \t from [{currentPosition.Column},{currentPosition.Row}] to [{nextPosition.Column},{nextPosition.Row}]");
-
-            CheckCheese(nextPosition);
-
-            if (_cheeseFound == false) MoveUp(nextPosition);
-            if (_cheeseFound == false) MoveRight(nextPosition);
-            if (_cheeseFound == false) MoveLeft(nextPosition);
-        }
-        else
-        {
-            // Console.WriteLine($"* Impossible move to up from [{currentPosition.Column},{currentPosition.Row}] to [{nextPosition.Column},{nextPosition.Row}]");
             _path.Remove();
+            return false;
         }
+
+        return canMoveUp || canMoveRight || canMoveLeft;
     }
 
-    private void MoveRight(Position currentPosition)
+    private bool MoveRight(Position currentPosition)
     {
+        bool canMoveUp = true;
         bool canMoveRight = true;
+        bool canMoveDown = true;
+        Position nextPosition = new Position(currentPosition.Column + 1, currentPosition.Row);
 
         int indexRightColumn = currentPosition.Column + 1;
-        if (indexRightColumn >= _maze.GetLength(Dimension.Column)) canMoveRight = false;
-
         char valueRightColumn = _maze[currentPosition.Row, indexRightColumn];
-        if (valueRightColumn is Constants.Wall or Constants.Mouse) canMoveRight = false;
 
-        Position nextPosition = new Position(currentPosition.Column + 1, currentPosition.Row);
-        if (_path.Isset(nextPosition)) canMoveRight = false;
+        if (valueRightColumn is Constants.Wall or Constants.Mouse) return false;
+        if (_path.Isset(nextPosition)) return false;
         _path.Add(nextPosition);
+        Console.WriteLine($"→ Moved to right \t from [{currentPosition.Column},{currentPosition.Row}] to [{nextPosition.Column},{nextPosition.Row}]");
 
+        CheckCheese(nextPosition);
+        if (_cheeseFound == false) canMoveUp = MoveUp(nextPosition);
+        if (_cheeseFound == false) canMoveRight = MoveRight(nextPosition);
+        if (_cheeseFound == false) canMoveDown = MoveDown(nextPosition);
 
-        if (canMoveRight)
+        if (canMoveUp == false && canMoveRight == false && canMoveDown == false)
         {
-            Console.WriteLine($"→ Moved to right \t from [{currentPosition.Column},{currentPosition.Row}] to [{nextPosition.Column},{nextPosition.Row}]");
-
-            CheckCheese(nextPosition);
-
-            if (_cheeseFound == false) MoveUp(nextPosition);
-            if (_cheeseFound == false) MoveRight(nextPosition);
-            if (_cheeseFound == false) MoveDown(nextPosition);
-        }
-        else
-        {
-            // Console.WriteLine($"* Impossible move to right from [{currentPosition.Column},{currentPosition.Row}] to [{nextPosition.Column},{nextPosition.Row}]");
             _path.Remove();
+            return false;
         }
+
+        return canMoveUp || canMoveRight || canMoveDown;
     }
 
-    private void MoveDown(Position currentPosition)
+    private bool MoveDown(Position currentPosition)
     {
+        bool canMoveRight = true;
+        bool canMoveDown = true;
+        bool canMoveLeft = true;
+        Position nextPosition = new Position(currentPosition.Column, currentPosition.Row + 1);
+
         int indexDownRow = currentPosition.Row + 1;
         char valueDownRow = _maze[indexDownRow, currentPosition.Column];
 
-        bool canMoveDown = true;
-        if (indexDownRow >= _maze.GetLength(Dimension.Row)) canMoveDown = false;
-        else if (valueDownRow is Constants.Wall or Constants.Mouse) canMoveDown = false;
-
-        Position nextPosition = new Position(currentPosition.Column, currentPosition.Row + 1);
-        if (_path.Isset(nextPosition)) canMoveDown = false;
+        if (valueDownRow is Constants.Wall or Constants.Mouse) return false;
+        if (_path.Isset(nextPosition)) return false;
         _path.Add(nextPosition);
+        Console.WriteLine($"→ Moved to down \t from [{currentPosition.Column},{currentPosition.Row}] to [{nextPosition.Column},{nextPosition.Row}]");
 
 
-        if (canMoveDown)
+        CheckCheese(nextPosition);
+        if (_cheeseFound == false) canMoveRight = MoveRight(nextPosition);
+        if (_cheeseFound == false) canMoveDown = MoveDown(nextPosition);
+        if (_cheeseFound == false) canMoveLeft = MoveLeft(nextPosition);
+
+        if (canMoveRight == false && canMoveDown == false && canMoveLeft == false)
         {
-            Console.WriteLine($"→ Moved to down \t from [{currentPosition.Column},{currentPosition.Row}] to [{nextPosition.Column},{nextPosition.Row}]");
-
-            CheckCheese(nextPosition);
-
-            if (_cheeseFound == false) MoveRight(nextPosition);
-            if (_cheeseFound == false) MoveDown(nextPosition);
-            if (_cheeseFound == false) MoveLeft(nextPosition);
-        }
-        else
-        {
-            // Console.WriteLine($"* Impossible move to down from [{currentPosition.Column},{currentPosition.Row}] to [{nextPosition.Column},{nextPosition.Row}]");
             _path.Remove();
+            return false;
         }
+
+        return canMoveRight || canMoveDown || canMoveLeft;
     }
 
-    private void MoveLeft(Position currentPosition)
+    private bool MoveLeft(Position currentPosition)
     {
+        bool canMoveUp = true;
+        bool canMoveDown = true;
+        bool canMoveLeft = true;
+        Position nextPosition = new Position(currentPosition.Column - 1, currentPosition.Row);
+
         int indexLeftColumn = currentPosition.Column - 1;
         char valueLeftColumn = _maze[currentPosition.Row, indexLeftColumn];
 
-        bool canMoveLeft = true;
-        if (indexLeftColumn < 0) canMoveLeft = false;
-        else if (valueLeftColumn is Constants.Wall or Constants.Mouse) canMoveLeft = false;
-
-        Position nextPosition = new Position(currentPosition.Column - 1, currentPosition.Row);
-        if (_path.Isset(nextPosition)) canMoveLeft = false;
+        if (valueLeftColumn is Constants.Wall or Constants.Mouse) return false;
+        if (_path.Isset(nextPosition)) return false;
         _path.Add(nextPosition);
+        Console.WriteLine($"→ Moved to left: \t from [{currentPosition.Column},{currentPosition.Row}] to [{nextPosition.Column},{nextPosition.Row}]");
 
 
-        if (canMoveLeft)
+        CheckCheese(nextPosition);
+        if (_cheeseFound == false) canMoveUp = MoveUp(nextPosition);
+        if (_cheeseFound == false) canMoveDown = MoveDown(nextPosition);
+        if (_cheeseFound == false) canMoveLeft = MoveLeft(nextPosition);
+
+        if (canMoveUp == false && canMoveDown == false && canMoveLeft == false)
         {
-            Console.WriteLine($"→ Moved to left: \t from [{currentPosition.Column},{currentPosition.Row}] to [{nextPosition.Column},{nextPosition.Row}]");
-
-            CheckCheese(nextPosition);
-
-            if (_cheeseFound == false) MoveUp(nextPosition);
-            if (_cheeseFound == false) MoveDown(nextPosition);
-            if (_cheeseFound == false) MoveLeft(nextPosition);
-        }
-        else
-        {
-            // Console.WriteLine($"* Impossible move to left from [{currentPosition.Column},{currentPosition.Row}] to [{nextPosition.Column},{nextPosition.Row}]");
             _path.Remove();
+            return false;
         }
+
+        return canMoveUp || canMoveDown || canMoveLeft;
     }
 
     private void CheckCheese(Position currentPosition)

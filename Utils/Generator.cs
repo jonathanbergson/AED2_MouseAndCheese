@@ -92,8 +92,8 @@ internal static class Generator {
     public static char[,] MazeWrongPathStatic() {
         return new[,] {
             { '1', '1', '1', '1', '1', '1' },
-            { '1', 'R', '0', '0', '0', '1' },
-            { '1', '1', '0', '1', '0', '1' },
+            { '1', 'R', '1', '1', '1', '1' },
+            { '1', '0', '0', '0', '0', '1' },
             { '1', '1', '0', '1', '1', '1' },
             { '1', '1', '0', '0', 'Q', '1' },
             { '1', '1', '1', '1', '1', '1' },
@@ -111,7 +111,7 @@ internal static class Generator {
         };
     }
 
-    public static void MazeFile()
+    public static void MazeMakeFile(string mazeFileName = "maze.txt", int mazeColumns = 8, int mazeRows = 8)
     {
         try
         {
@@ -119,13 +119,13 @@ internal static class Generator {
 
             String arquivoEscrita;
             Console.Write("Digite nome do arquivo de entrada >> ");
-            arquivoEscrita = Console.ReadLine();
+            arquivoEscrita = mazeFileName; //Console.ReadLine();
 
             int numeroLinhas, numeroColunas;
             Console.Write("Digite numero de linhas do labirinto >> ");
-            numeroLinhas = Convert.ToInt32(Console.ReadLine());
+            numeroLinhas = mazeRows; // Convert.ToInt32(Console.ReadLine());
             Console.Write("Digite numero de colunas do labirinto >> ");
-            numeroColunas = Convert.ToInt32(Console.ReadLine());
+            numeroColunas = mazeColumns; //Convert.ToInt32(Console.ReadLine());
 
 
             if (numeroLinhas <= 0 || numeroColunas <= 0)
@@ -176,5 +176,75 @@ internal static class Generator {
         {
             Console.WriteLine(excecao.Message);
         }
+    }
+
+    public static char[,] MazeReadFile(string mazeFileName = "maze.txt")
+    {
+        char[,] maze = { };
+        int[] mousePosition = Array.Empty<int>();
+        int[] cheesePosition = Array.Empty<int>();
+
+        try
+        {
+            using (StreamReader stream = new StreamReader(mazeFileName))
+            {
+                int lineNumber = 0;
+                int mazeLine = 0;
+
+                while (stream.ReadLine() is { } line)
+                {
+                    switch (lineNumber)
+                    {
+                        case 0:
+                        {
+                            string[] mazeSize = line.Split(' ');
+                            int column = Convert.ToInt32(mazeSize[Dimension.Column]);
+                            int row = Convert.ToInt32(mazeSize[Dimension.Row]);
+                            maze = new char[column, row];
+                            break;
+                        }
+                        case 1:
+                        {
+                            string[] position = line.Split(' ');
+                            int column = Convert.ToInt32(position[Dimension.Column]);
+                            int row = Convert.ToInt32(position[Dimension.Row]);
+
+                            mousePosition = new[] { column, row } ;
+                            break;
+                        }
+                        case 2:
+                        {
+                            string[] position = line.Split(' ');
+                            int column = Convert.ToInt32(position[Dimension.Column]);
+                            int row = Convert.ToInt32(position[Dimension.Row]);
+
+                            cheesePosition = new[] { column, row } ;
+                            break;
+                        }
+                        default:
+                        {
+                            for (int i = 0; i < line.Length; i++)
+                            {
+                                maze[mazeLine, i] = line[i];
+                            }
+                            mazeLine++;
+                            break;
+                        }
+                    }
+
+                    lineNumber++;
+                }
+            }
+
+            maze[mousePosition[0], mousePosition[1]] = Constants.Mouse;
+            maze[cheesePosition[0], cheesePosition[1]] = Constants.Cheese;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
+        return maze;
     }
 }
