@@ -4,9 +4,9 @@ public static class Program
 {
     private static void Main()
     {
-        char[,] mazeStatic = Generator.MazeStatic();
+        char[,] mazeGenerated = Generator.MazeWrongPathStatic();
 
-        Maze maze = new Maze(mazeStatic);
+        Maze maze = new Maze(mazeGenerated);
         maze.Print();
         maze.FindCheese();
     }
