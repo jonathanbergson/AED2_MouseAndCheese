@@ -47,4 +47,20 @@ public class List
         }
         Console.WriteLine();
     }
+
+    public void SaveFile(string fileName = "maze-result.txt")
+    {
+        using (StreamWriter stream = new StreamWriter(fileName))
+        {
+            ListNode node = _head.next;
+
+            while (node != null)
+            {
+                stream.Write($"({node.position.Column},{node.position.Row}) ");
+                node = node.next;
+            }
+        }
+
+        Console.WriteLine("\n\tFile saved!!!");
+    }
 }

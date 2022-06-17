@@ -40,6 +40,7 @@ public class Maze
             Console.WriteLine("\tCheese found!!!");
             Console.WriteLine("\tPath to cheese (happy): ");
             _pathHappy.Show();
+            _pathHappy.SaveFile();
             Console.WriteLine();
         }
     }
@@ -211,7 +212,7 @@ public class Maze
 
         for (int l = 0; l < _maze.GetLength(0); l++)
         {
-            Console.Write("\t\t");
+            Console.Write("\t");
             for (int c = 0; c < _maze.GetLength(1) -1; c++)
             {
                 Console.Write($"{_maze[l, c]}, ");
@@ -221,8 +222,8 @@ public class Maze
         }
 
         Console.WriteLine();
-        Console.WriteLine($"\t\tMouse:  [{_mousePosition.Column},{_mousePosition.Row}]");
-        Console.WriteLine($"\t\tCheese: [{_cheesePosition.Column},{_mousePosition.Row}]");
+        Console.WriteLine($"\tMouse:  [{_mousePosition.Column},{_mousePosition.Row}]");
+        Console.WriteLine($"\tCheese: [{_cheesePosition.Column},{_mousePosition.Row}]");
         Console.WriteLine();
         Console.WriteLine();
     }

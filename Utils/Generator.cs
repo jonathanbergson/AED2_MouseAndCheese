@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+
 namespace main;
 
 internal static class Generator {
@@ -111,7 +114,7 @@ internal static class Generator {
         };
     }
 
-    public static void MazeMakeFile(string mazeFileName = "maze.txt", int mazeColumns = 8, int mazeRows = 8)
+    public static void MazeMakeFile(string fileName = "maze.txt", int mazeColumns = 8, int mazeRows = 8)
     {
         try
         {
@@ -119,7 +122,7 @@ internal static class Generator {
 
             String arquivoEscrita;
             Console.Write("Digite nome do arquivo de entrada >> ");
-            arquivoEscrita = mazeFileName; //Console.ReadLine();
+            arquivoEscrita = fileName; //Console.ReadLine();
 
             int numeroLinhas, numeroColunas;
             Console.Write("Digite numero de linhas do labirinto >> ");
@@ -178,7 +181,7 @@ internal static class Generator {
         }
     }
 
-    public static char[,] MazeReadFile(string mazeFileName = "maze.txt")
+    public static char[,] MazeReadFile(string fileName = "maze.txt")
     {
         char[,] maze = { };
         int[] mousePosition = Array.Empty<int>();
@@ -186,7 +189,7 @@ internal static class Generator {
 
         try
         {
-            using (StreamReader stream = new StreamReader(mazeFileName))
+            using (StreamReader stream = new StreamReader(fileName))
             {
                 int lineNumber = 0;
                 int mazeLine = 0;
