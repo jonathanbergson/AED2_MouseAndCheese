@@ -1,13 +1,14 @@
-namespace main;
-
-public struct Position
+namespace main
 {
-    public int Column { get; }
-    public int Row { get; }
-
-    public Position(int column, int row)
+    public struct Position
     {
-        Column = column;
-        Row = row;
+        public int Column { get; }
+        public int Row { get; }
+
+        public Position(int column, int row)
+        {
+            Column = column;
+            Row = row;
+        }
     }
 }

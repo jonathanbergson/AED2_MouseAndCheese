@@ -1,66 +1,71 @@
-namespace main;
+using System;
+using System.IO;
 
-public class ListNode
+namespace main
 {
-    public Position position;
-    public ListNode next;
-
-    public ListNode(Position position, ListNode next)
+    public class ListNode
     {
-        this.position = position;
-        this.next = next;
-    }
-}
+        public Position position;
+        public ListNode next;
 
-public class List
-{
-    private readonly ListNode _head;
-    private ListNode _tail;
-
-    public List()
-    {
-        Position headPosition = new Position(-1, -1);
-        _head = new ListNode(headPosition, null);
-        _tail = _head;
-    }
-
-    public void Prepend(Position position)
-    {
-        ListNode node = new ListNode(position, _head.next);
-        _head.next = node;
-
-        if (node.next == null)
+        public ListNode(Position position, ListNode next)
         {
-            _tail = node;
+            this.position = position;
+            this.next = next;
         }
     }
 
-    public void Show()
+    public class List
     {
-        ListNode node = _head.next;
+        private readonly ListNode _head;
+        private ListNode _tail;
 
-        Console.Write("\t");
-        while (node != null)
+        public List()
         {
-            Console.Write($" →  [{node.position.Column},{node.position.Row}]");
-            node = node.next;
+            Position headPosition = new Position(-1, -1);
+            _head = new ListNode(headPosition, null);
+            _tail = _head;
         }
-        Console.WriteLine();
-    }
 
-    public void SaveFile(string fileName = "maze-result.txt")
-    {
-        using (StreamWriter stream = new StreamWriter(fileName))
+        public void Prepend(Position position)
         {
-            ListNode node = _head.next;
+            ListNode node = new ListNode(position, _head.next);
+            _head.next = node;
 
-            while (node != null)
+            if (node.next == null)
             {
-                stream.Write($"({node.position.Column},{node.position.Row}) ");
-                node = node.next;
+                _tail = node;
             }
         }
 
-        Console.WriteLine("\n\tFile saved!!!");
+        public void Show()
+        {
+            ListNode node = _head.next;
+
+            Console.Write("\t");
+            while (node != null)
+            {
+                Console.Write($" →  [{node.position.Column},{node.position.Row}]");
+                node = node.next;
+            }
+
+            Console.WriteLine();
+        }
+
+        public void SaveFile(string fileName = "maze-result.txt")
+        {
+            using (StreamWriter stream = new StreamWriter(fileName))
+            {
+                ListNode node = _head.next;
+
+                while (node != null)
+                {
+                    stream.Write($"({node.position.Column},{node.position.Row}) ");
+                    node = node.next;
+                }
+            }
+
+            Console.WriteLine("\n\tFile saved!!!");
+        }
     }
 }
